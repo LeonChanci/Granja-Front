@@ -40,3 +40,9 @@ Crear CRUD sobre la información referenciada anteriormente.
 Desarrollar un reporte sobre clientes y porcinos.
 Aprendizaje independiente.
 
+## Info
+Proyecto by Politecnico Colimbiano Jaime Isaza Cadavid
+
+Signature: PROGRAMACIÓN DISTRIBUIDA Y PARALELA
+
+Teacher: Hernando Recaman Chaux

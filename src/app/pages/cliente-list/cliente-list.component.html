@@ -1,0 +1,126 @@
+<div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 class="title">Clientes de la Granja
+          <button 
+            type="button" 
+            class="btn btn-outline-success"
+            data-bs-toggle="modal" 
+            data-bs-target="#clienteModal"
+            (click)="newCliente(false)"
+          >Add Client</button>
+        </h1>
+        <p>Información de los clientes</p>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-hover">
+        @if(clienteList$; as clienteList) {
+        <thead>
+          <tr>
+            <th>Identificación</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        @for(cliente of clienteList; track cliente.idCliente) {
+          <tr>
+            <td>{{ cliente.idCliente }}</td>
+            <td>{{ cliente.nombres }}</td>
+            <td>{{ cliente.apellidos }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>
+              <p class="d-inline-flex gap-1">
+                <button (click)="getCliente(cliente.idCliente)" class="btn btn-outline-success" type="button" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#clienteModal"
+                >Edit</button>
+                <button (click)="deletCliente(cliente.idCliente)" class="btn btn-outline-danger" type="button"
+                >Trash</button>
+              </p>
+            </td>
+          </tr>
+        }
+        </tbody>
+      }
+      </table>
+    </div>
+  </div>
+</div>
+
+<div>
+  <!-- Modal -->
+  <div class="modal fade" id="clienteModal" tabindex="-1" aria-labelledby="clienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          @if (isEditClient) {
+            <h1 class="modal-title fs-5" id="clienteModalLabel">Modificar Información</h1>
+          } @else {
+            <h1 class="modal-title fs-5" id="clienteModalLabel">Crear nuevo Cliente</h1>
+          }
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formCliente" [formGroup]="formGroupCliente">
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="identificacion" 
+                  [formControl]="identificacion" placeholder="Identificación">
+                  <label for="identificacion">Identificación</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="telefono" 
+                  [formControl]="telefono" placeholder="Teléfono">
+                  <label for="telefono">Teléfono</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="nombres" 
+                  [formControl]="nombres" placeholder="Nombres">
+                  <label for="nombres">Nombres</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="apellidos" 
+                  [formControl]="apellidos" placeholder="Apellidos">
+                  <label for="apellidos">Apellidos</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="direccion" 
+                  [formControl]="direccion" placeholder="Dirección">
+                  <label for="direccion">Dirección</label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          @if (isEditClient) {
+            <button (click)="editCliente()" type="submit" data-bs-dismiss="modal" class="btn btn-outline-success">Save</button>
+          } @else {
+            <button (click)="saveCliente()" id="save" type="submit" data-bs-dismiss="modal" class="btn btn-outline-success">Crear</button>
+          }
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

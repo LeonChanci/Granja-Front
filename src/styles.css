@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background: white;
+}
+.nav {
+    background: #033536!important;
+}
+
+.title {
+    margin-top: 3rem;
+}
+
+.btn-outline-success {
+    --bs-btn-border-color: #045456!important;
+}
+
+.btn-outline-success:hover {
+    background:#055f60!important;
+}

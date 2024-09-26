@@ -1,0 +1,176 @@
+<div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 class="title">Porcinos
+          <button 
+            type="button" 
+            class="btn btn-outline-success"
+            data-bs-toggle="modal" 
+            data-bs-target="#porcinoModal"
+            (click)="newPorcino(false)"
+          >Add Pig</button>
+        </h1>
+        <p>Información de los porcinos</p>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-hover">
+        @if(porcinoSumaryList$; as porcinoSumaryList) {
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Peso</th>
+            <th>Alimento</th>
+            <th>Dosis</th>
+            <th>Id Dueño</th>
+            <th>Dueño</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        @for(porcinoSumary of porcinoSumaryList; track porcinoSumary.idPorcino) {
+          <tr>
+            <td>{{ porcinoSumary.idPorcino }}</td>
+            <td>{{ porcinoSumary.descripcionRaza }}</td>
+            <td>{{ porcinoSumary.edad }} Años</td>
+            <td>{{ porcinoSumary.peso }} Kg</td>
+            <td>{{ porcinoSumary.descripcionAl }}</td>
+            <td>{{ porcinoSumary.dosis }}</td>
+            <td>{{ porcinoSumary.idCliente }}</td>
+            <td>{{ porcinoSumary.nombres }} {{ porcinoSumary.apellidos }}</td>
+            <td>
+              <p class="d-inline-flex gap-1">
+                <button (click)="getPorcino(porcinoSumary.idPorcino)" class="btn btn-outline-success" type="button" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#porcinoModal"
+                >Edit</button>
+                <button (click)="deletPorcino(porcinoSumary.idPorcino)" class="btn btn-outline-danger" type="button"
+                  routerLink="/porcinos"
+                >Trash</button>
+              </p>
+            </td>
+          </tr>
+        }
+        </tbody>
+      }
+      </table>
+    </div>
+  </div>
+</div>
+
+<div>
+  <!-- Modal -->
+  <div class="modal fade" id="porcinoModal" tabindex="-1" aria-labelledby="porcinoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          @if (isEditPig) {
+            <h1 class="modal-title fs-5" id="clienteModalLabel">Modificar Información</h1>
+          } @else {
+            <h1 class="modal-title fs-5" id="clienteModalLabel">Ingresar nuevo Porcino</h1>
+          }
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formPorcino" [formGroup]="formGroupPorcino">
+            <div class="row">
+              @if (isEditPig) {
+                <div class="col-2">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="idPorcino" 
+                    [formControl]="idPorcino">
+                  </div>
+                </div>
+              }
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <select class="form-select" aria-label="Default select example"
+                    [formControl]="identificacion" formControlName="identificacion">
+                    <option selected value='0'>Seleccionar Dueño</option>
+                    @if(clienteList$; as clienteList) {                       
+                      @for(cliente of clienteList; track cliente.idCliente) {
+                        <option value={{cliente.idCliente}}>
+                          {{cliente.idCliente}} - {{ cliente.nombres }} {{ cliente.apellidos }}
+                        </option>
+                      }
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <div class="form-floating mb-3">
+                  <select class="form-select" aria-label="Default select example"
+                    [formControl]="raza" formControlName="raza">
+                    <option selected value='0'>Seleccionar Raza</option>
+                    @if(razaList$; as razaList) {
+                      @for(raza of razaList; track raza.idRaza) {
+                        <option value={{raza.idRaza}}>
+                          {{raza.descripcionRaza}}
+                        </option>
+                      }
+                    }
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <select class="form-select" aria-label="Default select example"
+                    [formControl]="alimentacion" formControlName="alimentacion">
+                    <option selected value='0'>Seleccionar Alimentacion</option>
+                    @if(alimentaacionList$; as alimentacionList) {
+                      @for(alimentacion of alimentacionList; track alimentacion.idAlimentacion) {
+                        <option value={{alimentacion.idAlimentacion}}>
+                          {{alimentacion.descripcionAl}}
+                        </option>
+                      }
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="edad" 
+                  [formControl]="edad" placeholder="Edad">
+                  <label for="edad">Edad</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="peso" 
+                  [formControl]="peso" placeholder="Peso(Kg)">
+                  <label for="peso">Peso(Kg)</label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          >Cancelar</button>
+          @if (isEditPig) {
+            <button (click)="editPorcino()" type="submit" 
+              class="btn btn-outline-success"
+              routerLink="/porcinos"
+            >Save 
+            @if (isLoader) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            }
+            </button>
+          } @else {
+            <button (click)="savePorcino()" id="save" type="submit" data-bs-dismiss="modal" 
+              class="btn btn-outline-success"
+              routerLink="/porcinos"
+            >Crear</button>
+          }
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
